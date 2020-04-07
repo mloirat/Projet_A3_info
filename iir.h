@@ -1,6 +1,6 @@
 #include "define.h"
 
 
-absorp iirTest(char* record1_fir);
+absorp iirTest(char* filename);
 
-float IIR(float Xn, float Xancien);
+absorp IIR(absorp myAbsorp);

@@ -1,12 +1,13 @@
 #include "affichage.h"
 #include <stdio.h>
 #include <unistd.h>
+
 void affichage(oxy myOxy){
     if( access( ".verrouData", F_OK ) != -1 ){ // Fichier verrou existe
         printf("Attention l'application java lit le Data.txt");//on supprime le fichier verrou pour que l'application java puisse lire le fichier Data.txt
 
     }else{// Fichier verrou n'existe pas
-        FILE* verrou = fopen(".verrouData", "r");;//ce fichier va permettre de bloquer la lecture de l'application java sur le fichier Data.txt
+        FILE* verrou = fopen(".verrouData", "r");//ce fichier va permettre de bloquer la lecture de l'application java sur le fichier Data.txt
         //"r" = ouverture en lecture seule
 
         FILE* fichier_data = fopen("Data.txt", "w+"); //le fichier data.txt où l'on va écrire les nouvelles valeurs de SpO2 et BMP
