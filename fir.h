@@ -2,16 +2,21 @@
 //#include "stdbool.h"
 // Definition de la structure
 #define MAX_SIZE 30
+typedef struct{
+    int tableau_acr[51]; //tableau pour garder en mémoire les valeurs de acr
+    int tableau_acir[51]; //tableau pour garder en mémoire les valeurs de acr
+} buffer;
 
 absorp firTest(char* record1);
 
-absorp FIR(absorp myAbsorb, float ** buffer);
+absorp FIR(absorp myAbsorb, buffer tableau);
 
 float FIR_TAPS[51];
 
-float** init_fir();//permet d'initialiser le tableau à deux dimensions  qui gardera en mémoire les valeurs des entrées acr et acir du filtre FIR
 
-void fin_fir(float** tableau);
+
+buffer init_fir(void);//permet d'initialiser la structure qui gardera en mémoire les valeurs des entrées acr et acir du filtre FIR
+
 
 /*
 //definition de queueArray , qu'on utilisera pour faire le buffer

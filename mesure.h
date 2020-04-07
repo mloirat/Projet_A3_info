@@ -2,4 +2,5 @@
 
 oxy mesureTest(char* filename);
 
-	
+
+oxy MESURE(oxy myOxy);

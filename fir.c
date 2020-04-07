@@ -7,18 +7,22 @@ absorp firTest(char* filename){
 	absorp	myAbsorp;
     FILE* fichier=initFichier(filename); //je défini mon fichier ayant toutes les valeurs
     int etat=0;
-    float** buffer= init_fir(); //tableau 2 dimension qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
+    buffer tableau_sauvegarde= init_fir(); //tableau 2 dimension qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
     myAbsorp=lireFichier(fichier, &etat);
     while(etat != EOF){
-        myAbsorp=FIR(myAbsorp, buffer);
+        myAbsorp=FIR(myAbsorp, tableau_sauvegarde);
     }
     finFichier(fichier);
-    fin_fir(buffer);
     return myAbsorp;
 }
 
-float** init_fir(){
-    float ** tableau_sauvegarde; //déclaration d'un double pointeur pour créer un tableau à deux dimensions
+buffer init_fir(void){
+    buffer buffer_init;
+    for (int i = 0; i <51 ; ++i) {
+        buffer_init.tableau_acr[i]=0;
+        buffer_init.tableau_acir[i]=0;
+    }
+    /*float ** tableau_sauvegarde; //déclaration d'un double pointeur pour créer un tableau à deux dimensions
     int i;
     int j;
     tableau_sauvegarde = malloc (2*sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
@@ -32,10 +36,13 @@ float** init_fir(){
             }
         }
     }
-    return tableau_sauvegarde;
+    return tableau_sauvegarde;*/
+    return buffer_init;
 }
 
-absorp FIR(absorp myAbsorb, float ** buffer){ //buffer est un tableau deux dimensions
+absorp FIR(absorp myAbsorb, buffer tableau){ //buffer est un tableau deux dimensions
+ ///version avant///
+ /*
     int i;
     int j;
     for (i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
@@ -51,6 +58,22 @@ absorp FIR(absorp myAbsorb, float ** buffer){ //buffer est un tableau deux dimen
         myAbsorb.acir += FIR_TAPS[k] * buffer[1][k]; //on modifie la valeur de acir, correspond au yn du filtre
     }
     return myAbsorb;
+    */
+    int i;
+    for (int i = 50; i >0; --i) {
+        tableau.tableau_acr[i]=tableau.tableau_acr[i-1];
+        tableau.tableau_acir[i]=tableau.tableau_acir[i-1];
+    }
+    tableau.tableau_acr[0]=myAbsorb.acr;
+    tableau.tableau_acir[0]=myAbsorb.acir;
+    int k;
+    for (k=0; k<=50; k++){
+        myAbsorb.acr += FIR_TAPS[k] * tableau.tableau_acr[k]; //on modifie la valeur de acr , correspond au yn du filtre
+        myAbsorb.acir += FIR_TAPS[k] * tableau.tableau_acir[k]; //on modifie la valeur de acir, correspond au yn du filtre
+    }
+    return myAbsorb;
+
+
 }
 
 
@@ -109,13 +132,6 @@ float FIR_TAPS[51]={
 };
 
 
-void fin_fir(float** tableau) {//tableau buffer à 2 dimensions qui a servi de mémoire
-    int i;
-    for (i = 0; i < 2; ++i) {
-        free(tableau[i]);//on supprime les lignes du tableau,//on libère la mémoire allouée
-    }
-    free(tableau);//on libère la mémoire allouée
-}
 
 
 /*

@@ -23,7 +23,8 @@ int main() {
     myAbsorp.dcr=3;
     myAbsorp.dcir=4;
 
-
+    absorp myabs=firTest("record1blbla");
+    printf("acr=%i \n acir=%i \n dcr=%i \n dcir=%i", myabs.acr,myabs.acir,myabs.dcr,myabs.dcir);
 
 
     return 0;
