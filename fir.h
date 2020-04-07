@@ -11,6 +11,7 @@ float FIR_TAPS[51];
 
 float** init_fir();//permet d'initialiser le tableau à deux dimensions  qui gardera en mémoire les valeurs des entrées acr et acir du filtre FIR
 
+void fin_fir(float** tableau);
 
 /*
 //definition de queueArray , qu'on utilisera pour faire le buffer

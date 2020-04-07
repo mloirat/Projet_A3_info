@@ -5,18 +5,28 @@
 
 absorp firTest(char* record1){
 	absorp	myAbsorp;
-	return myAbsorp;
-
+    FILE* fichier=initFichier("record1.dat"); //je défini mon fichier ayant toutes les valeurs
+    int etat=0;
+    float** buffer= init_fir(); //tableau 2 dimension qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
+    myAbsorp=lireFichier(fichier, &etat);
+    while(etat!= EOF){
+        myAbsorp=FIR(myAbsorp, buffer);
+    }
+    finFichier(fichier);
+    fin_fir(buffer);
+    return myAbsorp;
 }
 
 float** init_fir(){
     float ** tableau_sauvegarde; //déclaration d'un double pointeur pour créer un tableau à deux dimensions
+    int i;
+    int j;
     tableau_sauvegarde = malloc (2*sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
     if(tableau_sauvegarde != NULL){//on vérifie que la mémoire a bien été alouée
-        for (int i = 0; i < 2; i++){
+        for (i = 0; i < 2; i++){
             tableau_sauvegarde[i] = malloc (51*sizeof (float));//chaque ligne aura un tableau de 51valeurs pour garder en mémoire les entrées précédentes
             if (tableau_sauvegarde[i] != NULL){//on vérifie que la mémoire a bien été alouée
-                for (int j = 0; j < 51; ++j) {
+                for (j = 0; j < 51; ++j) {
                     tableau_sauvegarde[i][j]=0;//initialisation de toutes les valeurs à zéro
                 }
             }
@@ -26,14 +36,17 @@ float** init_fir(){
 }
 
 absorp FIR(absorp myAbsorb, float ** buffer){ //buffer est un tableau deux dimensions
-    for (int i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
-        for (int j = 50; j >0; --j) { //on se déplace en colonne
+    int i;
+    int j;
+    for (i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
+        for (j = 50; j >0; --j) { //on se déplace en colonne
             buffer[i][j]=buffer[i][j-1];//décalage de tous les x vers la droite pour pouvooir ajouter ensuite au début la nouvelle valeur xn en entrée
         }
     }
     buffer[0][0]=myAbsorb.acr;//ajout de la nouvelle entrée xn d'acr à la première place, on a donc buffer[0]=[x(n), x(n-1), ...]
     buffer[1][0]=myAbsorb.acir;//ajout de la nouvelle entrée xn d'acir à la première place, on a donc buffer[1]=[x(n), x(n-1), ...]
-    for (int k=0; k<=50; k++){
+    int k;
+    for (k=0; k<=50; k++){
         myAbsorb.acr += FIR_TAPS[k] * buffer[0][k]; //on modifie la valeur de acr , correspond au yn du filtre
         myAbsorb.acir += FIR_TAPS[k] * buffer[1][k]; //on modifie la valeur de acir, correspond au yn du filtre
     }
@@ -94,6 +107,16 @@ float FIR_TAPS[51]={
         1.6465231e-004,
         1.4774946e-019
 };
+
+
+void fin_fir(float** tableau) {//tableau buffer à 2 dimensions qui a servi de mémoire
+    int i;
+    for (i = 0; i < 2; ++i) {
+        free(tableau[i]);//on supprime les lignes du tableau,//on libère la mémoire allouée
+    }
+    free(tableau);//on libère la mémoire allouée
+}
+
 
 /*
 // Definitions des fonctions de queueArray qu'on utlisera comme buffer

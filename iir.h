@@ -3,6 +3,8 @@
 
 absorp iirTest(char* filename);
 
-absorp IIR(absorp myAbsorp);
+absorp IIR(absorp myAbsorp, float* param_iir);
 
 float* init_iir();
+
+void fin_iir(float* tableau);

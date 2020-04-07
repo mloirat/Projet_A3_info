@@ -4,13 +4,15 @@
 
 absorp iirTest(char* filename){
 	absorp	myAbsorp;
-	initFichier(filename);
-	lireFichier(filename);
-	IIR(myAbsorp);
-	if ( feof(filename)!=0){
-	    finFichier(filename);
-	}
-
+	int etat=0;
+    FILE* fichier=initFichier("record1_fir.dat");
+    float* param_iir=init_iir();
+    myAbsorp=lireFichier(fichier, &etat);
+    while(etat!= EOF){
+        myAbsorp=IIR(myAbsorp, param_iir);
+    }
+    finFichier(fichier);
+    fin_iir(param_iir);
 	return myAbsorp;
 
 }
@@ -36,11 +38,17 @@ absorp IIR(absorp myAbsorp, float* param_iir){
 }
 
 float* init_iir(){ //tableau de 4 elements pour stocker les valeurs n-1 de y et de x pour acR et acIR
+    int i;
     float * sauvegarde=malloc(4* sizeof(float));
-    for (int i=0; i<=3; i++){
+    for (i=0; i<=3; i++){
         if(sauvegarde != NULL) {
             sauvegarde[i]=0;
         }
     }
     return sauvegarde;
+}
+
+
+void fin_iir(float* tableau){//tableau qui a servi de mémoire
+    free(tableau);//on libère la mémoire allouée
 }
