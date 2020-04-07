@@ -1,7 +1,7 @@
 #include "fir.h"
 #include "fichiers.h"
-#include "stdio.h"
-#include "stdlib.h"
+//#include "stdio.h"
+//#include "stdlib.h"
 
 absorp firTest(char* record1){
 	absorp	myAbsorp;
@@ -9,17 +9,33 @@ absorp firTest(char* record1){
 
 }
 
-
-absorp FIR(absorp myAbsorb, int n, float * buffer_ACR, float * buffer_ACIR){
-    for (int i = 50; i >0; --i) {
-        buffer_ACR[i]=buffer_ACR[i-1];//décalage de tous les xn de acr
-        buffer_ACIR[i]=buffer_ACIR[i-1];//décalage de tous les xn de acir
+float** init_fir(){
+    float ** tableau_sauvegarde; //déclaration d'un double pointeur pour créer un tableau à deux dimensions
+    tableau_sauvegarde = malloc (2*sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
+    if(tableau_sauvegarde != NULL){//on vérifie que la mémoire a bien été alouée
+        for (int i = 0; i < 2; i++){
+            tableau_sauvegarde[i] = malloc (51*sizeof (float));//chaque ligne aura un tableau de 51valeurs pour garder en mémoire les entrées précédentes
+            if (tableau_sauvegarde[i] != NULL){//on vérifie que la mémoire a bien été alouée
+                for (int j = 0; j < 51; ++j) {
+                    tableau_sauvegarde[i][j]=0;//initialisation de toutes les valeurs à zéro
+                }
+            }
+        }
     }
-    buffer_ACR[0]=myAbsorb.acr;//ajout à la première place du tableau la nouvelle entrée xn d'acr, on a donc buffer_ACR=[x(n), x(n-1), ...]
-    buffer_ACIR[0]=myAbsorb.acir;//ajout à la première place du tableau la nouvelle entrée xn d'acr, on a donc buffer_ACIR=[x(n), x(n-1), ...]
+    return tableau_sauvegarde;
+}
+
+absorp FIR(absorp myAbsorb, float ** buffer){ //buffer est un tableau deux dimensions
+    for (int i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
+        for (int j = 50; j >0; --j) { //on se déplace en colonne
+            buffer[i][j]=buffer[i][j-1];//décalage de tous les x vers la droite pour pouvooir ajouter ensuite au début la nouvelle valeur xn en entrée
+        }
+    }
+    buffer[0][0]=myAbsorb.acr;//ajout de la nouvelle entrée xn d'acr à la première place, on a donc buffer[0]=[x(n), x(n-1), ...]
+    buffer[1][0]=myAbsorb.acir;//ajout de la nouvelle entrée xn d'acir à la première place, on a donc buffer[1]=[x(n), x(n-1), ...]
     for (int k=0; k<=50; k++){
-        myAbsorb.acr += FIR_TAPS[k] * buffer_ACR[k]; //on modifie la valeur de acr , correspond au yn du filtre
-        myAbsorb.acir += FIR_TAPS[k] * buffer_ACIR[k]; //on modifie la valeur de acir, correspond au yn du filtre
+        myAbsorb.acr += FIR_TAPS[k] * buffer[0][k]; //on modifie la valeur de acr , correspond au yn du filtre
+        myAbsorb.acir += FIR_TAPS[k] * buffer[1][k]; //on modifie la valeur de acir, correspond au yn du filtre
     }
     return myAbsorb;
 }

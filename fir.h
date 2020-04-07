@@ -1,13 +1,16 @@
 #include "define.h"
-#include "stdbool.h"
+//#include "stdbool.h"
 // Definition de la structure
 #define MAX_SIZE 30
 
 absorp firTest(char* record1);
 
-absorp FIR(absorp myAbsorb, int n, float * buffer_AC_R, float * buffer_AC_IR);
+absorp FIR(absorp myAbsorb, float ** buffer);
 
 float FIR_TAPS[51];
+
+float** init_fir();//permet d'initialiser le tableau à deux dimensions  qui gardera en mémoire les valeurs des entrées acr et acir du filtre FIR
+
 
 /*
 //definition de queueArray , qu'on utilisera pour faire le buffer

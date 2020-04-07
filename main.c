@@ -17,10 +17,8 @@ int main() {
     myAbsorp.acir=2;
     myAbsorp.dcr=3;
     myAbsorp.dcir=4;
-    //init des buffers
-    float * buffer_acr=malloc(50* sizeof(float));//garde toutes les valeurs des AC_R, correspond aux xn en entrée du filtre FIR
-    float * buffer_acir=malloc(50* sizeof(float));// garde toutes les valeurs des AC_IR, correspond aux xn en entrée du filtre FIR
-    FIR(myAbsorp, 1, &buffer_acr, &buffer_acir);
-
+    //init du tableau buffer
+    float** buffer= init_fir(); //tableau 2 dimension qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
+    FIR(myAbsorp, buffer);
     return 0;
 }
