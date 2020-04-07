@@ -23,10 +23,6 @@ int main() {
     myAbsorp.dcr=3;
     myAbsorp.dcir=4;
 
-    //init du tableau buffer
-
-
-    ///FILTRE IRR///
 
 
 

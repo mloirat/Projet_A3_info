@@ -3,13 +3,13 @@
 //#include "stdio.h"
 //#include "stdlib.h"
 
-absorp firTest(char* record1){
+absorp firTest(char* filename){
 	absorp	myAbsorp;
-    FILE* fichier=initFichier("record1.dat"); //je défini mon fichier ayant toutes les valeurs
+    FILE* fichier=initFichier(filename); //je défini mon fichier ayant toutes les valeurs
     int etat=0;
     float** buffer= init_fir(); //tableau 2 dimension qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
     myAbsorp=lireFichier(fichier, &etat);
-    while(etat!= EOF){
+    while(etat != EOF){
         myAbsorp=FIR(myAbsorp, buffer);
     }
     finFichier(fichier);

@@ -5,7 +5,7 @@
 absorp iirTest(char* filename){
 	absorp	myAbsorp;
 	int etat=0;
-    FILE* fichier=initFichier("record1_fir.dat");
+    FILE* fichier=initFichier(filename);
     float* param_iir=init_iir();
     myAbsorp=lireFichier(fichier, &etat);
     while(etat!= EOF){
