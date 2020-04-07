@@ -25,7 +25,7 @@ int main() {
 
 
     absorp myAbsorp = firTest("record1.dat");
-    printf("acr= %i \n acir= %i \n dcr= %i \n dcir= %i", myAbsorp.acr, myAbsorp.acir, myAbsorp.dcr, myAbsorp.dcir);
+    printf("acr= %f \n acir= %f \n dcr= %f \n dcir= %f", myAbsorp.acr, myAbsorp.acir, myAbsorp.dcr, myAbsorp.dcir);
 
 
 
