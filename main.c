@@ -17,14 +17,16 @@ int main() {
     ///FILTRE FIR///
 
     //absorp myAbsorp=lireFichier(mon_fichier,NULL);//je récupère mon premier absorp
-    absorp myAbsorp;
+    /*absorp myAbsorp;
     myAbsorp.acr=1;
     myAbsorp.acir=2;
     myAbsorp.dcr=3;
-    myAbsorp.dcir=4;
+    myAbsorp.dcir=4;*/
 
-    absorp myabs=firTest("record1blbla");
-    printf("acr=%i \n acir=%i \n dcr=%i \n dcir=%i", myabs.acr,myabs.acir,myabs.dcr,myabs.dcir);
+
+    absorp myAbsorp = firTest("record1.dat");
+    printf("acr= %i \n acir= %i \n dcr= %i \n dcir= %i", myAbsorp.acr, myAbsorp.acir, myAbsorp.dcr, myAbsorp.dcir);
+
 
 
     return 0;

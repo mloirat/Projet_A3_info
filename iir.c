@@ -10,6 +10,7 @@ absorp iirTest(char* filename){
     myAbsorp=lireFichier(fichier, &etat);
     while(etat!= EOF){
         myAbsorp=IIR(myAbsorp, param_iir);
+        myAbsorp=lireFichier(fichier, &etat);
     }
     finFichier(fichier);
     fin_iir(param_iir);

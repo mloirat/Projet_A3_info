@@ -11,6 +11,7 @@ absorp firTest(char* filename){
     myAbsorp=lireFichier(fichier, &etat);
     while(etat != EOF){
         myAbsorp=FIR(myAbsorp, tableau_sauvegarde);
+        myAbsorp=lireFichier(fichier, &etat);
     }
     finFichier(fichier);
     return myAbsorp;
@@ -18,7 +19,8 @@ absorp firTest(char* filename){
 
 buffer init_fir(void){
     buffer buffer_init;
-    for (int i = 0; i <51 ; ++i) {
+    int i;
+    for (i = 0; i <51 ; ++i) {
         buffer_init.tableau_acr[i]=0;
         buffer_init.tableau_acir[i]=0;
     }
@@ -60,7 +62,7 @@ absorp FIR(absorp myAbsorb, buffer tableau){ //buffer est un tableau deux dimens
     return myAbsorb;
     */
     int i;
-    for (int i = 50; i >0; --i) {
+    for (i = 50; i >0; --i) {
         tableau.tableau_acr[i]=tableau.tableau_acr[i-1];
         tableau.tableau_acir[i]=tableau.tableau_acir[i-1];
     }
