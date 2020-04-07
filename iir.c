@@ -4,13 +4,14 @@
 
 absorp iirTest(char* filename){
 	absorp	myAbsorp;
+    absorp	myAbsorp_new;
 	int etat=0;
     FILE* fichier=initFichier(filename);
     float* param_iir=init_iir();
-    myAbsorp=lireFichier(fichier, &etat);
+    myAbsorp_new=lireFichier(fichier, &etat);
     while(etat!= EOF){
-        myAbsorp=IIR(myAbsorp, param_iir);
-        myAbsorp=lireFichier(fichier, &etat);
+        myAbsorp=IIR(myAbsorp_new, param_iir);
+        myAbsorp_new=lireFichier(fichier, &etat);
     }
     finFichier(fichier);
     fin_iir(param_iir);
@@ -24,10 +25,11 @@ absorp IIR(absorp myAbsorp, float* param_iir){
     float valeurACIR;
 
     //filtrage acR:
-    valeurACR = myAbsorp.acr - param_iir[0]  + alpha *param_iir[3]; //on filtre la valeur de ACr
+    valeurACR = myAbsorp.acr - param_iir[0]  + alpha *param_iir[1]; //on filtre la valeur de ACr
     param_iir[0]=myAbsorp.acr; //la précédente valeur de acR est mémorisée dans myIIR indice 0
     param_iir[1]=valeurACR; //la précédente valeur filtrée de acR est mémorisée dans myIIR indice 1
     myAbsorp.acr=valeurACR; // la valeur filtrée est mise dans la structure
+
 
     //filtrage acIR:
     valeurACIR = myAbsorp.acir - param_iir[2] + alpha *param_iir[3]; //on filtre la valeur de ACir

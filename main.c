@@ -24,7 +24,7 @@ int main() {
     myAbsorp.dcir=4;*/
 
 
-    absorp myAbsorp = firTest("record1.dat");
+    absorp myAbsorp = iirTest("record1_fir.dat");
     printf("acr= %f \n acir= %f \n dcr= %f \n dcir= %f", myAbsorp.acr, myAbsorp.acir, myAbsorp.dcr, myAbsorp.dcir);
 
 
