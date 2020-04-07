@@ -1,7 +1,7 @@
 #include "fichiers.h"
 
 FILE* initFichier(char* nomFichier ){
-	
+
 	FILE* pf=fopen(nomFichier,"r");
 	if(pf==NULL){
 		printf("dans fichiers.c : erreur ouverture fichier %s\n",nomFichier);

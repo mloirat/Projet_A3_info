@@ -1,13 +1,13 @@
 #include "iir.h"
 
-absorp iirTest(char* record1_fir.dat){
+absorp iirTest(char* record1_fir){
 	absorp	myAbsorp;
-	IIR(absorp.acr, ancienneValeur);
+	//IIR(absorp.acr, ancienneValeur);
 
 	return myAbsorp;
 
 }
-
+/*
 float IIR(float absorp.acr, float absorp.acir){
     int alpha= 0.992;
     int y =0;
@@ -16,3 +16,4 @@ float IIR(float absorp.acr, float absorp.acir){
         y=absorp.acr[n]
         absorp.acir[n] = absorp.acir[n] - absorp.acir[n-1] + alpha *absorp.acr[n-1];
     }
+    */
