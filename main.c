@@ -27,7 +27,7 @@ int main() {
 
     //MESURE//
     oxy myOxy = mesureTest("record1_iir.dat");
-    printf("spo2 = %f \n pouls = %f \n", myOxy.spo2, myOxy.pouls);
+    printf("spo2 = %d \n pouls = %d \n", myOxy.spo2, myOxy.pouls);
 
     return 0;
 }

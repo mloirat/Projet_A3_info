@@ -14,4 +14,4 @@ myMesures init_mesure();
 oxy mesureTest(char* filename);
 
 
-oxy MESURE(absorp myAbsorp, myMesures myMes);
+oxy MESURE(absorp myAbsorp, myMesures* myMes, oxy myOxy);
