@@ -5,7 +5,7 @@
 #include "fichiers.h"
 #include "iir.h"
 #include "mesure.h"
-
+#include "integration.h"
 int main() {
 
     ///TEST AFFICHAGE///
@@ -29,6 +29,8 @@ int main() {
     oxy myOxy = mesureTest("record1_iir.dat");
     printf("spo2 = %d \n pouls = %d \n", myOxy.spo2, myOxy.pouls);
 
+    //INTEGRATION//
+    integrationTest("record1.dat");
     return 0;
 }
 

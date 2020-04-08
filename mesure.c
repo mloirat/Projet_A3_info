@@ -13,6 +13,7 @@ oxy mesureTest(char* filename){
         myAbsorp=lireFichier(fichier, &etat_fichier);
     }
     finFichier(fichier);
+    fin_mesure(mesure.tab_bpm,mesure.tab_sp02);
 	return myOxy;
 }
 
@@ -24,6 +25,14 @@ myMesures init_mesure(){//créer une structure MyMesures, initialisation de tout
     myMes.max_acr=0;
     myMes.min_acir=0;
     myMes.max_acir=0;
+    myMes.tab_bpm=malloc (2*sizeof (float *));//permet de stocker les deux dernières valeurs de bmp
+    if(myMes.tab_bpm!=NULL){
+        myMes.tab_bpm[0]=0;
+        myMes.tab_bpm[1]=0; }
+    myMes.tab_sp02=malloc (2*sizeof (float *));//permet de stocker les deux dernières valeurs de bmp
+    if(myMes.tab_sp02!=NULL){
+        myMes.tab_sp02[0]=0;
+        myMes.tab_sp02[1]=0; }
     return myMes;
 }
 
@@ -60,13 +69,28 @@ oxy MESURE(absorp myAbsorp, myMesures* myMes, oxy myOxy){
                 myMes->min_acir=myAbsorp.acir;
             }
             if (myAbsorp.acr>0){//dépassement du zéro, front montant, on vient d'obtenir une période
-                myOxy.pouls = 60/(myMes->cpt_ech * 0.002);//calcul du BPM
+                int pouls_actuel = 60/(myMes->cpt_ech * 0.002);//calcul du pouls actuel
+                if(myMes->tab_bpm[0]!=0 && myMes->tab_bpm[1]!=0){//il y a des valeurs précédentes de pouls afin de faire une moyenne
+                    myOxy.pouls=(myMes->tab_bpm[0]+myMes->tab_bpm[1]+pouls_actuel)/3; //on fait la moyenne du pouls avec les deux dernières valeurs
+                    myMes->tab_bpm[1]=myMes->tab_bpm[0];//on translate les valeurs de pouls sauvegardées pour ajouter la nouvelle valeur du pouls
+                    myMes->tab_bpm[0]=pouls_actuel; //ajout de la nouvelle valeur pouls
+                } else{
+                    myOxy.pouls=pouls_actuel;//il n'y a pas deux valeurs précédentes de pouls, on ne fait pas de moyenne
+                }
                 myMes->ratio=((myMes->max_acr - myMes->min_acr)/myAbsorp.dcr ) / ((myMes->max_acir - myMes->min_acir)/myAbsorp.dcir ); //calcul du ratio RsIR
+                int sp02_actuel;
                 if(myMes->ratio>=0.4 && myMes->ratio<=1){
-                    myOxy.spo2= -25*myMes->ratio +110; //calcul Sp02 à partir de la pente du graphe "correspondance entre RsIR et SpO2"
+                    sp02_actuel= -25*myMes->ratio +110; //calcul Sp02 à partir de la pente du graphe "correspondance entre RsIR et SpO2"
                 }
                 if(myMes->ratio>1 && myMes->ratio<=3.4){
-                    myOxy.spo2= (-100/3)*myMes->ratio +(350/3); //calcul Sp02 à partir de la pente du graphe "correspondance entre RsIR et SpO2"
+                    sp02_actuel=myOxy.spo2= (-100/3)*myMes->ratio +(350/3); //calcul Sp02 à partir de la pente du graphe "correspondance entre RsIR et SpO2"
+                }
+                if(myMes->tab_sp02[0]!=0 && myMes->tab_sp02[1]!=0){//il y a des valeurs précédentes de sp02 afin de faire une moyenne
+                    myOxy.spo2=(myMes->tab_sp02[0]+myMes->tab_sp02[1]+pouls_actuel)/3; //on fait la moyenne de sp02 avec les deux dernières valeurs
+                    myMes->tab_sp02[1]=myMes->tab_sp02[0];//on translate les valeurs de sp02 sauvegardées pour ajouter la nouvelle valeur du sp02
+                    myMes->tab_sp02[0]=sp02_actuel; //ajout de la nouvelle valeur sp02
+                } else{
+                    myOxy.spo2=sp02_actuel;//il n'y a pas deux valeurs précédentes de sp02, on ne fait pas de moyenne
                 }
                 myMes->etat=2; //on recommence une période
                 myMes->cpt_ech=0; //on remet le compteur à zéro
@@ -80,4 +104,9 @@ oxy MESURE(absorp myAbsorp, myMesures* myMes, oxy myOxy){
             break;
     }
     return myOxy;
+}
+
+void fin_mesure(float* tableau1, float* tableau2){
+    free(tableau1);
+    free(tableau2);
 }

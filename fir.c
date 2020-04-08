@@ -18,11 +18,11 @@ absorp firTest(char* filename){
 }
 
 float** init_fir(){
-    float ** tableau_sauvegarde; //dÃ©claration d'un double pointeur pour crÃ©er un tableau Ã  deux dimensions
+    float ** tableau_sauvegarde; //déclaration d'un double pointeur pour crÃ©er un tableau à  deux dimensions
     int i;
     int j;
     tableau_sauvegarde = malloc (2*sizeof (float *));// 2 lignes, la premiÃ¨re pour garder les valeurs acr et la deuxiÃ¨me pour les valeurs acir
-    if(tableau_sauvegarde != NULL){//on vÃ©rifie que la mÃ©moire a bien Ã©tÃ© alouÃ©e
+    if(tableau_sauvegarde != NULL){//on vérifie que la mémoire a bien été alouée
         for (i = 0; i < 2; i++){
             tableau_sauvegarde[i] = malloc (51*sizeof (float));//chaque ligne aura un tableau de 51valeurs pour garder en mÃ©moire les entrÃ©es prÃ©cÃ©dentes
 
@@ -117,5 +117,5 @@ void fin_fir(float** tableau) {//tableau buffer Ã  2 dimensions qui a servi de
     for (i = 0; i < 2; ++i) {
         free(tableau[i]);//on supprime les lignes du tableau,//on libÃ¨re la mÃ©moire allouÃ©e
     }
-    free(tableau);//on libÃ¨re la mÃ©moire allouÃ©e
+    free(tableau);//on libère la mémoire allouÃ©e
 }
