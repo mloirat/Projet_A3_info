@@ -1,10 +1,12 @@
 #include "define.h"
 
 
-absorp iirTest(char* filename);
+//Fonctions :
 
-absorp IIR(absorp myAbsorp, float* param_iir);
+absorp iirTest(char* filename); //fonction qui appelle la fonction IIR avec le fichier de données
 
-float* init_iir();
+absorp IIR(absorp myAbsorp, float* param_iir); //filtre IIR
 
-void fin_iir(float* tableau);
+float* init_iir(); //initialisation du tableau
+
+void fin_iir(float* tableau); //permet de libérer la mémoire du tableau
