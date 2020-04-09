@@ -2,7 +2,6 @@
 #include "affichage.h"
 #include "define.h"
 #include "fir.h"
-#include "fichiers.h"
 #include "iir.h"
 #include "mesure.h"
 #include "integration.h"

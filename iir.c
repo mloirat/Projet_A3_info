@@ -1,7 +1,6 @@
 #include "iir.h"
 #include "fichiers.h"
 
-
 absorp iirTest(char* filename){
 	absorp	myAbsorp;
     absorp	myAbsorp_new;
@@ -16,7 +15,17 @@ absorp iirTest(char* filename){
     finFichier(fichier);
     fin_iir(param_iir); //on libère la mémoire allouée pour le tableau
 	return myAbsorp;
+}
 
+float* init_iir(){ //tableau de 4 elements pour stocker les valeurs n-1 de y et de x pour acR et acIR
+    int i;
+    float * sauvegarde=malloc(4* sizeof(float)); //on alloue un tableau de 4 éléments
+    for (i=0; i<=3; i++){ //on rempli le tableau de 0 au début pour initialiser
+        if(sauvegarde != NULL) {
+            sauvegarde[i]=0;
+        }
+    }
+    return sauvegarde;
 }
 
 absorp IIR(absorp myAbsorp, float* param_iir){
@@ -30,7 +39,6 @@ absorp IIR(absorp myAbsorp, float* param_iir){
     param_iir[1]=valeurACR; //la précédente valeur filtrée de acR est mémorisée dans param_iir indice 1
     myAbsorp.acr=valeurACR; //la valeur filtrée est mise dans la structure
 
-
     //FILTRAGE acIR:
     valeurACIR = myAbsorp.acir - param_iir[2] + alpha *param_iir[3]; //on filtre la valeur de ACir
     param_iir[2]=myAbsorp.acir; //la précédente valeur de acIR est mémorisée dans param_iir indice 2
@@ -38,17 +46,6 @@ absorp IIR(absorp myAbsorp, float* param_iir){
     myAbsorp.acir=valeurACIR; //la valeur filtrée est mise dans la structure
 
     return myAbsorp;
-}
-
-float* init_iir(){ //tableau de 4 elements pour stocker les valeurs n-1 de y et de x pour acR et acIR
-    int i;
-    float * sauvegarde=malloc(4* sizeof(float)); //on alloue un tableau de 4 éléments
-    for (i=0; i<=3; i++){ //on rempli le tableau de 0 au début pour initialiser
-        if(sauvegarde != NULL) {
-            sauvegarde[i]=0;
-        }
-    }
-    return sauvegarde;
 }
 
 
