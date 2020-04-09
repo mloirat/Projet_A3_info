@@ -1,6 +1,8 @@
 #ifndef MESURE_H
 #define MESURE_H
 #include "define.h"
+
+
 typedef struct{
     int etat; //indice permettant de nous repérer par rapport aux périodes
     int cpt_ech; //compteur d'echantillons par période

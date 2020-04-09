@@ -26,7 +26,7 @@ int main() {
 
     //MESURE//
     oxy myOxy = mesureTest("record1_iir.dat");
-    printf("spo2 = %d \n pouls = %d \n", myOxy.spo2, myOxy.pouls);
+    printf("spo2 = %d %\npouls = %d bpm\n", myOxy.spo2, myOxy.pouls);
 
     //INTEGRATION//
     integrationTest("record1.dat");

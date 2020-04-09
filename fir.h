@@ -2,6 +2,7 @@
 #define FIR_H
 #include "define.h"
 
+
 //Fonctions:
 absorp firTest(char* record1); //fonction qui appelle la fonction FIR avec le fichier contenant les données
 

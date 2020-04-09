@@ -12,7 +12,7 @@ void integrationTest(char* filename){
     oxy myOxy;
     myOxy.spo2=0;
     myOxy.pouls=0;
-    float** buffer= init_fir(); //tableau 2 dimensions qui va garder en mémoire les 51entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
+    float** buffer= init_fir(); //tableau 2 dimensions qui va garder en mémoire les 51 entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
     float* param_iir=init_iir(); //tableau de 4 éléments qui garde en mémoire les valeurs n-1 de x et y pour acR et acIR
     myMesures mesure = init_mesure();
     FILE* fichier=initFichier(filename); //défini mon fichier ayant toutes les valeurs
