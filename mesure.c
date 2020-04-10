@@ -3,22 +3,22 @@
 
 oxy mesureTest(char* filename){
 	oxy myOxy;
-	absorp myAbsorp;
+	absorp myAbs;
 	myOxy.pouls=0;
 	myOxy.spo2=0;
     int etat_fichier=0;
-    myMesures mesure = init_mesure(); //initialisation de la structure pour garder en mémoire les valeurs d'un appel de fonction à l'autre
+    myMesures mesures = init_mesure(); //initialisation de la structure pour garder en mémoire les valeurs d'un appel de fonction à l'autre
     FILE* fichier=initFichier(filename); //défini mon fichier ayant toutes les valeurs
-    myAbsorp=lireFichier(fichier, &etat_fichier);
-    while(etat_fichier!= EOF){ //lecture du fichier et calculs de Sp02 et du pouls grâce aux données tant qu'on est pas arrivé à la fin du fichier
-        myOxy = MESURE(myAbsorp, &mesure, myOxy);
-        myAbsorp=lireFichier(fichier, &etat_fichier);}
+    myAbs=lireFichier(fichier, &etat_fichier);
+    while(etat_fichier!= EOF){ //lecture du fichier tant qu'on est pas arrivé à la fin du fichier
+        myOxy = MESURE(myAbs, &mesures, myOxy); //calcul de Sp02 et du pouls grâce aux données
+        myAbs=lireFichier(fichier, &etat_fichier);}
     finFichier(fichier); //fermeture du fichier
-    fin_mesure(mesure.tab_bpm); //on supprime le tableau dynamique créé
+    fin_mesure(mesures.tab_bpm); //libération de la mémoire allouée
 	return myOxy;
 }
 
-myMesures init_mesure(){//créer une structure MyMesures, initialisation de toutes les valeurs à zéro
+myMesures init_mesure(){//création d'une structure MyMesures, initialisation de toutes les valeurs à zéro
     myMesures myMes;
     myMes.cpt_ech=0;
     myMes.etat=0;
@@ -26,7 +26,7 @@ myMesures init_mesure(){//créer une structure MyMesures, initialisation de tout
     myMes.max_acr=0;
     myMes.min_acir=0;
     myMes.max_acir=0;
-    myMes.tab_bpm=malloc (2*sizeof (int *));//permet de stocker les deux dernières valeurs de bmp
+    myMes.tab_bpm=malloc (2*sizeof (int *));//tableau pour stocker les deux dernières valeurs de bmp
     if(myMes.tab_bpm!=NULL){
         myMes.tab_bpm[0]=0;
         myMes.tab_bpm[1]=0; }
@@ -69,40 +69,40 @@ int calcul_de_SPO2(absorp myAbs, myMesures* myMes){
 oxy MESURE(absorp myAbsorp, myMesures* myMes, oxy myOxy){
     switch (myMes->etat) {
         case 0: //permet de fixer un premier repère pour calculer la periode
-            if (myAbsorp.acr<0){//dépassement de zéro, front descendant
+            if (myAbsorp.acr<0){  //dépassement de zéro, front descendant
                 myMes->etat=1;
             }
             break;
         case 1: //on se calibre sur la courbe,
-            if (myAbsorp.acr>0){//dépassement du zéro, front montant
+            if (myAbsorp.acr>0){  //dépassement du zéro, front montant
                 myMes->etat=2;
             }
             break;
-        case 2://début d'une période, on commence à calculer le nombre d'échantillons sur une période
+        case 2: //début d'une période, on commence à calculer le nombre d'échantillons sur une période
             myMes->cpt_ech++;
-            if (myAbsorp.acr> myMes->max_acr) { //on récupère la valeur maximale de acr de la période
+            if (myAbsorp.acr> myMes->max_acr) { //récupération de la valeur maximale de acr de la période
                 myMes->max_acr=myAbsorp.acr;
             }
-            if (myAbsorp.acir> myMes->max_acir) { //on récupère la valeur maximale de acir de la période
+            if (myAbsorp.acir> myMes->max_acir) { //récupération de la valeur maximale de acir de la période
                 myMes->max_acir=myAbsorp.acir;
             }
-            if (myAbsorp.acr<0){//dépassement du zéro, front descendant
+            if (myAbsorp.acr<0){  //dépassement du zéro, front descendant
                 myMes->etat=3;}
             break;
         case 3:
             myMes->cpt_ech++;
-            if (myAbsorp.acr<myMes->min_acr) { //on récupère la valeur minimale de acr de la période
+            if (myAbsorp.acr<myMes->min_acr) { //récupération de la valeur minimale de acr de la période
                 myMes->min_acr=myAbsorp.acr;
             }
-            if (myAbsorp.acir<myMes->min_acir) { //on récupère la valeur minimale de acir de la période
+            if (myAbsorp.acir<myMes->min_acir) { //récupération de la valeur minimale de acir de la période
                 myMes->min_acir=myAbsorp.acir;
             }
-            if (myAbsorp.acr>0){//dépassement du zéro, front montant, on vient d'obtenir une période
+            if (myAbsorp.acr>0){  //dépassement du zéro, front montant, on vient d'obtenir une période
                 myOxy.pouls= calcul_du_BMP(myMes);
                 myOxy.spo2= calcul_de_SPO2(myAbsorp,myMes);
                 myMes->etat=2; //on recommence une période
-                myMes->cpt_ech=0; //on remet le compteur à zéro
-                myMes->max_acr=0; //on remet les valeurs extrèmes à zéro
+                myMes->cpt_ech=0; //remise à zéro du compteur
+                myMes->max_acr=0; //remise à zéro des valeurs extrêmes
                 myMes->min_acr=0;
                 myMes->max_acir=0;
                 myMes->min_acir=0;
@@ -115,5 +115,5 @@ oxy MESURE(absorp myAbsorp, myMesures* myMes, oxy myOxy){
 }
 
 void fin_mesure(int* tableau1){
-    free(tableau1);
+    free(tableau1); //libération de la mémoire allouée
 }

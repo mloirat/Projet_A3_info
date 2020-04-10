@@ -45,6 +45,7 @@ int main() {
     //LECTURE//
     FILE* fichier=initFichier("record1_bin.dat");
     int etat=0;
+
     absorp myAbs= lecture(fichier, &etat);
     printf("acr= %f \n acir= %f \n dcr= %f \n dcir= %f \n", myAbs.acr, myAbs.acir, myAbs.dcr, myAbs.dcir);
 

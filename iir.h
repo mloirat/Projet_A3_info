@@ -7,7 +7,7 @@ absorp iirTest(char* filename); //fonction qui appelle la fonction IIR avec le f
 
 float* init_iir(); //initialisation du tableau
 
-absorp IIR(absorp myAbsorp, float* param_iir); //filtre IIR
+absorp IIR(absorp myAbsorp, float* parametre_irr); //filtre IIR
 
 void fin_iir(float* tableau); //permet de libérer la mémoire du tableau
 

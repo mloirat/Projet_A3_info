@@ -2,40 +2,40 @@
 #include "fichiers.h"
 
 absorp firTest(char* filename){
-    absorp	myAbsorp;
-    absorp	myAbsorp_new;
-    FILE* fichier=initFichier(filename); //je défini mon fichier ayant toutes les valeurs
-    int etat=0;
-    float** buffer= init_fir(); //tableau 2 dimensions qui va garder en mémoire les 51 entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
-    myAbsorp_new=lireFichier(fichier, &etat);
-    while(etat != EOF){ //on lis le fichier et filtre les données tant qu'on est pas arrivé à la fin du fichier
-        myAbsorp=FIR(myAbsorp_new, buffer);
-        myAbsorp_new=lireFichier(fichier, &etat);
+    absorp	myAbs;
+    absorp	myAbs_new;
+    FILE* fichier=initFichier(filename);    //je défini mon fichier ayant toutes les valeurs
+    int etat_fichier=0;
+    float** buffer= init_fir();     //tableau 2 dimensions qui va garder en mémoire les 51 entrées x(n) de acr du filtre FIR sur la première ligne et celles de acir sur la deuxième ligne
+    myAbs_new=lireFichier(fichier, &etat_fichier);
+    while(etat_fichier != EOF){     //on lit le fichier et filtre les données tant qu'on est pas arrivé à la fin du fichier
+        myAbs=FIR(myAbs_new, buffer);     //on applique à la structure le filtre FIR
+        myAbs_new=lireFichier(fichier, &etat_fichier); //on prend de nouvelles valeurs
     }
     finFichier(fichier);
     fin_fir(buffer); //on libère la mémoire allouée pour le tableau
-    return myAbsorp;
+    return myAbs;
 }
 
 float** init_fir(){
-    float ** tableau_sauvegarde; //déclaration d'un double pointeur pour créer un tableau à  deux dimensions
+    float ** buffer; //déclaration d'un double pointeur pour créer un tableau à  deux dimensions
     int i;
     int j;
-    tableau_sauvegarde = malloc (2*sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
-    if(tableau_sauvegarde != NULL){//on vérifie que la mémoire a bien été alouée
+    buffer = malloc (2 * sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
+    if(buffer != NULL){ //on vérifie que la mémoire a bien été alouée
         for (i = 0; i < 2; i++){
-            tableau_sauvegarde[i] = malloc (51*sizeof (float));//chaque ligne aura un tableau de 51 valeurs pour garder en mémoire les entrées précédentes
-            if (tableau_sauvegarde[i] != NULL){//on vérifie que la mémoire a bien été alouée
+            buffer[i] = malloc (51 * sizeof (float));//chaque ligne gardera en mémoire 51 valeurs correspondant aux entrées précédentes
+            if (buffer[i] != NULL){//on vérifie que la mémoire a bien été alouée
                 for (j = 0; j < 51; ++j) {
-                    tableau_sauvegarde[i][j]=0;//initialisation de toutes les valeurs à zéro
+                    buffer[i][j]=0;//initialisation de toutes les valeurs à zéro
                 }
             }
         }
     }
-    return tableau_sauvegarde;
+    return buffer;
 }
 
-absorp FIR(absorp myAbsorb, float ** buffer){ //buffer est un tableau deux dimensions
+absorp FIR(absorp myAbsorb, float ** buffer){ //on applique un filtre
     int i;
     int j;
     for (i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
@@ -111,10 +111,8 @@ float FIR_TAPS[51]={ //tableau des coefficients h
 };
 
 
-void fin_fir(float** tableau) {//tableau buffer à  2 dimensions qui a servi de mémoire
-    int i;
-    for (i = 0; i < 2; ++i) {
-        free(tableau[i]);//on supprime les lignes du tableau,on libère la mémoire allouée
-    }
+void fin_fir(float** tableau) {// pour effacer le buffer à  2 dimensions qui a servi de mémoire
+    free(tableau[0]);//on supprime la première ligne du tableau,on libère la mémoire allouée
+    free(tableau[1]);//on supprime la deuxième ligne du tableau,on libère la mémoire allouée
     free(tableau);//on libère la mémoire allouée
 }
