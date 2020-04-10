@@ -43,12 +43,12 @@ int main() {
     */
 
     //LECTURE//
+    /*
     FILE* fichier=initFichier("record1_bin.dat");
     int etat=0;
-
     absorp myAbs= lecture(fichier, &etat);
     printf("acr= %f \nacir= %f \ndcr= %f \ndcir= %f \n", myAbs.acr, myAbs.acir, myAbs.dcr, myAbs.dcir);
-    printf("lalala");
+    */
 
     return 0;
 }
