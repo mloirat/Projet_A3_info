@@ -21,13 +21,13 @@ float** init_fir(){
     float ** buffer; //déclaration d'un double pointeur pour créer un tableau à  deux dimensions
     int i;
     int j;
-    buffer = malloc (2 * sizeof (float *));// 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
+    buffer = malloc (2 * sizeof (float *)); // 2 lignes, la première pour garder les valeurs acr et la deuxième pour les valeurs acir
     if(buffer != NULL){ //on vérifie que la mémoire a bien été alouée
         for (i = 0; i < 2; i++){
-            buffer[i] = malloc (51 * sizeof (float));//chaque ligne gardera en mémoire 51 valeurs correspondant aux entrées précédentes
-            if (buffer[i] != NULL){//on vérifie que la mémoire a bien été alouée
+            buffer[i] = malloc (51 * sizeof (float)); //chaque ligne gardera en mémoire 51 valeurs correspondant aux entrées précédentes
+            if (buffer[i] != NULL){ //on vérifie que la mémoire a bien été alouée
                 for (j = 0; j < 51; ++j) {
-                    buffer[i][j]=0;//initialisation de toutes les valeurs à zéro
+                    buffer[i][j]=0; //initialisation de toutes les valeurs à zéro
                 }
             }
         }
@@ -38,13 +38,13 @@ float** init_fir(){
 absorp FIR(absorp myAbsorb, float ** buffer){ //on applique un filtre
     int i;
     int j;
-    for (i = 0; i < 2; ++i) {// on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
+    for (i = 0; i < 2; ++i) { // on se déplace en ligne; pour i=0, on s'occupe des valeurs x acr; pour i=1, on s'occupe des valeurs x acir
         for (j = 50; j >0; --j) { //on se déplace en colonne
-            buffer[i][j]=buffer[i][j-1];//décalage de tous les x vers la droite pour pouvooir ajouter ensuite au début la nouvelle valeur xn en entrée
+            buffer[i][j]=buffer[i][j-1]; //décalage de tous les x vers la droite pour pouvoir ajouter ensuite au début la nouvelle valeur xn en entrée
         }
     }
-    buffer[0][0]=myAbsorb.acr;//ajout de la nouvelle entrée xn d'acr à la première place, on a donc buffer[0]=[x(n), x(n-1), ...]
-    buffer[1][0]=myAbsorb.acir;//ajout de la nouvelle entrée xn d'acir à la première place, on a donc buffer[1]=[x(n), x(n-1), ...]
+    buffer[0][0]=myAbsorb.acr; //ajout de la nouvelle entrée xn d'acr à la première place, on a donc buffer[0]=[x(n), x(n-1), ...]
+    buffer[1][0]=myAbsorb.acir; //ajout de la nouvelle entrée xn d'acir à la première place, on a donc buffer[1]=[x(n), x(n-1), ...]
     int k;
     myAbsorb.acr=0;
     myAbsorb.acir=0;

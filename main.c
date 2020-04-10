@@ -47,7 +47,8 @@ int main() {
     int etat=0;
 
     absorp myAbs= lecture(fichier, &etat);
-    printf("acr= %f \n acir= %f \n dcr= %f \n dcir= %f \n", myAbs.acr, myAbs.acir, myAbs.dcr, myAbs.dcir);
+    printf("acr= %f \nacir= %f \ndcr= %f \ndcir= %f \n", myAbs.acr, myAbs.acir, myAbs.dcr, myAbs.dcir);
+    printf("lalala");
 
     return 0;
 }

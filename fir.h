@@ -4,11 +4,12 @@
 
 
 //Fonctions:
+
 absorp firTest(char* record1); //fonction qui appelle la fonction FIR avec le fichier contenant les données
 
 float** init_fir(); //permet d'initialiser la structure qui gardera en mémoire les valeurs des entrées acr et acir du filtre FIR
 
-absorp FIR(absorp myAbsorb, float ** buffer); //permet dappliquer le filtre FIR à la structure myAbsorp
+absorp FIR(absorp myAbsorb, float ** buffer); //permet d'appliquer le filtre FIR à la structure myAbsorp
 
 float FIR_TAPS[51]; //tableau de coefficients h
 
